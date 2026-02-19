@@ -210,14 +210,14 @@ export default function GameBoard({
                 placedCards.length === 0 ? 0 : Math.min(...placedCards.map((p) => p.col));
               const maxC =
                 placedCards.length === 0 ? 0 : Math.max(...placedCards.map((p) => p.col));
-              const pad = 1;
+              const complete = isCompleteEnsemble(placedCards);
+              const pad = complete ? 0 : 1;
               const gridMinR = minR - pad;
               const gridMaxR = maxR + pad;
               const gridMinC = minC - pad;
               const gridMaxC = maxC + pad;
               const cols = gridMaxC - gridMinC + 1;
               const rows = gridMaxR - gridMinR + 1;
-              const complete = isCompleteEnsemble(placedCards);
               const points = placedCards.reduce((s, pc) => s + getPointsForCardCode(pc.card.code), 0);
               return (
                 <div key={ensemble.id} className="flex-shrink-0">
@@ -388,7 +388,7 @@ export default function GameBoard({
                 const maxR = Math.max(...placedCards.map((p) => p.row));
                 const minC = Math.min(...placedCards.map((p) => p.col));
                 const maxC = Math.max(...placedCards.map((p) => p.col));
-                const pad = 1;
+                const pad = complete ? 0 : 1;
                 const gridMinR = minR - pad;
                 const gridMaxR = maxR + pad;
                 const gridMinC = minC - pad;

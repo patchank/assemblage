@@ -331,7 +331,16 @@ export default function RoomClient({ code }: Props) {
             <div className="bg-white/80 rounded-lg p-4 shadow-md ring-2 ring-ink/25 space-y-2">
               <h2 className="font-semibold mb-1">Results</h2>
               {Object.keys(gameState.scores ?? {}).length === 0 ? (
-                <p className="text-sm text-ink/70">Game ended. A player left the room.</p>
+                <>
+                  <p className="text-sm text-ink/70">Game ended. A player left the room.</p>
+                  <button
+                    type="button"
+                    onClick={() => router.push("/")}
+                    className="w-full mt-2 px-3 py-2 rounded bg-ink text-white text-sm font-medium hover:bg-ink/90"
+                  >
+                    Return to lobby
+                  </button>
+                </>
               ) : (
               <ul className="space-y-1">
                 {Object.entries(gameState.scores ?? {}).map(([id, score]) => {

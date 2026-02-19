@@ -316,7 +316,7 @@ export function applyMove(
   if (!board) throw new Error("Player board not found.");
 
   if (placeMove.newEnsemble) {
-    board.ensembles.push({
+    board.ensembles.unshift({
       id: randomUUID(),
       placedCards: [
         {
@@ -348,6 +348,10 @@ export function applyMove(
       col: placeMove.col,
       rotation: placeMove.rotation
     });
+    if (isCompleteEnsemble(ensemble.placedCards)) {
+      board.ensembles.splice(ei, 1);
+      board.ensembles.push(ensemble);
+    }
   }
   newState.pendingCard = null;
   newState.currentTurnIndex =
