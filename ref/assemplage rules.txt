@@ -1,0 +1,26 @@
+
+Assemblage
+Instruction Manual
+Objective: Put together the largest ensemble of forms by strategically selecting cards from the table. Make sure you use all the cards you pick because cards outside a complete ensemble will cost you points. The player with more points when no cards remain in the table wins the game.
+Components:
+•	16 point cards – 1 point
+•	11 line cards – 16 points
+•	10 triangle cards – 14 points
+•	11 square cards – 12 points
+Setup:
+1.	Shuffle all the cards
+2.	Place the cards on the table facing up forming a 4 X 12 grid
+Gameplay:
+1.	A random player starts.
+2.	On your turn: 
+a. Take one card from the extreme of a row (you can’t take cards from the middle)
+b. Place the card in front of you and start forming ensembles with the other cards you have
+3.	Continue clockwise until all cards are taken.
+Assambling rules: 
+Each card has connection points on one or more of its sides. You can put a card on the side of another if the number of connection points on both matches.
+In a complete ensemble, all the cards have all their points connected with another card.
+End of Game: The game ends when all cards are taken. Players count points following this rules:
+•	Sum the points of all complete ensembles
+•	Substract the points of all cards outside complete ensembles
+•	Add 50 extra points to the player with the largest ensemble. If there is a tie, split the points between the players with the 
+Winning: The player with the most points wins. 
