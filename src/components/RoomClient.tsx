@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   collection,
@@ -46,6 +47,7 @@ export default function RoomClient({ code }: Props) {
   const [playerId, setPlayerId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
   useEffect(() => {
     async function init() {
@@ -182,15 +184,84 @@ export default function RoomClient({ code }: Props) {
     }
   };
 
+  const handleLeaveGame = async () => {
+    setError(null);
+    const res = await fetch(
+      `/api/rooms/${encodeURIComponent(code)}/leave`,
+      { method: "POST" }
+    );
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setError(data.error ?? "Failed to leave game.");
+      setShowLeaveConfirm(false);
+      return;
+    }
+    setShowLeaveConfirm(false);
+    router.push("/");
+  };
+
+  const isPlaying = gameState?.phase === "playing";
+
   return (
     <div className="w-full max-w-5xl mx-auto px-6 py-8 space-y-6">
       <div className="flex justify-center mb-4">
-        <img
-          src="/api/logo"
-          alt="Assemblage"
-          className="max-w-[200px] w-full h-auto"
-        />
+        {isPlaying ? (
+          <button
+            type="button"
+            onClick={() => setShowLeaveConfirm(true)}
+            className="block focus:outline-none focus:ring-2 focus:ring-ink/40 focus:ring-offset-2 rounded transition-opacity hover:opacity-90"
+            aria-label="Leave game and return home"
+          >
+            <img
+              src="/api/logo"
+              alt="Assemblage"
+              className="max-w-[200px] w-full h-auto"
+            />
+          </button>
+        ) : (
+          <Link href="/" className="block focus:outline-none focus:ring-2 focus:ring-ink/40 focus:ring-offset-2 rounded">
+            <img
+              src="/api/logo"
+              alt="Assemblage"
+              className="max-w-[200px] w-full h-auto"
+            />
+          </Link>
+        )}
       </div>
+
+      {showLeaveConfirm && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="leave-dialog-title"
+        >
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 space-y-4">
+            <h2 id="leave-dialog-title" className="text-lg font-semibold">
+              Leave game?
+            </h2>
+            <p className="text-sm text-ink/80">
+              You are about to leave the game. If you leave, the game will end for all players in the room.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                type="button"
+                onClick={() => setShowLeaveConfirm(false)}
+                className="px-4 py-2 rounded border border-ink/30 text-sm font-medium hover:bg-ink/5"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleLeaveGame}
+                className="px-4 py-2 rounded bg-ink text-white text-sm font-medium hover:bg-ink/90"
+              >
+                Leave game
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold mb-1">Room {code}</h1>
@@ -259,6 +330,9 @@ export default function RoomClient({ code }: Props) {
           {gameState && gameState.phase === "finished" && (
             <div className="bg-white/80 rounded-lg p-4 shadow-md ring-2 ring-ink/25 space-y-2">
               <h2 className="font-semibold mb-1">Results</h2>
+              {Object.keys(gameState.scores ?? {}).length === 0 ? (
+                <p className="text-sm text-ink/70">Game ended. A player left the room.</p>
+              ) : (
               <ul className="space-y-1">
                 {Object.entries(gameState.scores ?? {}).map(([id, score]) => {
                   const player = players.find((p) => p.id === id);
@@ -276,6 +350,7 @@ export default function RoomClient({ code }: Props) {
                   );
                 })}
               </ul>
+              )}
               {isHost && (
                 <button
                   type="button"

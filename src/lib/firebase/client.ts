@@ -16,30 +16,18 @@ let auth: Auth | null = null;
 let db: Firestore | null = null;
 
 function getFirebaseConfig() {
-  const {
-    NEXT_PUBLIC_FIREBASE_API_KEY,
-    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    NEXT_PUBLIC_FIREBASE_APP_ID
-  } = process.env;
+  const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+  const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN;
+  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+  const appId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID;
 
-  if (
-    !NEXT_PUBLIC_FIREBASE_API_KEY ||
-    !NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
-    !NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
-    !NEXT_PUBLIC_FIREBASE_APP_ID
-  ) {
+  if (!apiKey || !authDomain || !projectId || !appId) {
     throw new Error(
       "Missing Firebase client env vars. Add NEXT_PUBLIC_FIREBASE_API_KEY, NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN, NEXT_PUBLIC_FIREBASE_PROJECT_ID, NEXT_PUBLIC_FIREBASE_APP_ID to .env.local"
     );
   }
 
-  return {
-    apiKey: NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    appId: NEXT_PUBLIC_FIREBASE_APP_ID
-  };
+  return { apiKey, authDomain, projectId, appId };
 }
 
 export function getFirebaseClient() {
