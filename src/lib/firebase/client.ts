@@ -15,13 +15,6 @@ let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
 
-const FALLBACK_FIREBASE_CONFIG = {
-  apiKey: "AIzaSyBlouL3NBVX-zFigHEsXuKQkYrdHbyPGsU",
-  authDomain: "assemblage-27d9b.firebaseapp.com",
-  projectId: "assemblage-27d9b",
-  appId: "1:206766086361:web:8b48c27adf0b3edebf86c8"
-};
-
 function getFirebaseConfig() {
   const {
     NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -30,13 +23,22 @@ function getFirebaseConfig() {
     NEXT_PUBLIC_FIREBASE_APP_ID
   } = process.env;
 
+  if (
+    !NEXT_PUBLIC_FIREBASE_API_KEY ||
+    !NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
+    !NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
+    !NEXT_PUBLIC_FIREBASE_APP_ID
+  ) {
+    throw new Error(
+      "Missing Firebase client env vars. Add NEXT_PUBLIC_FIREBASE_API_KEY, NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN, NEXT_PUBLIC_FIREBASE_PROJECT_ID, NEXT_PUBLIC_FIREBASE_APP_ID to .env.local"
+    );
+  }
+
   return {
-    apiKey: NEXT_PUBLIC_FIREBASE_API_KEY || FALLBACK_FIREBASE_CONFIG.apiKey,
-    authDomain:
-      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || FALLBACK_FIREBASE_CONFIG.authDomain,
-    projectId:
-      NEXT_PUBLIC_FIREBASE_PROJECT_ID || FALLBACK_FIREBASE_CONFIG.projectId,
-    appId: NEXT_PUBLIC_FIREBASE_APP_ID || FALLBACK_FIREBASE_CONFIG.appId
+    apiKey: NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    appId: NEXT_PUBLIC_FIREBASE_APP_ID
   };
 }
 
